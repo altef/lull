@@ -213,7 +213,7 @@ session_start();
 Session::$database = $database;
 Session::start();
 ```
-That's all there is too it! You can just play with the `$_SESSIONS` superglobal as usual, and everything will be taken care of for you.
+That's all there is to it! You can just play with the `$_SESSIONS` superglobal as usual, and everything will be taken care of for you.
 
 If you need to change some of Session's internal settings:
 ```PHP	
