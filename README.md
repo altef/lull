@@ -18,7 +18,7 @@
 
 To add an endpoint to your API, you create an endpoint Controller, and decide whether users need to be logged in to use it, or if they can access it anonymously.
 
-Adding an endpoint is easy! Take a look at [Test.controller.php](blob/master/Test.controller.php) for as an example. As you can see, it extends [Controller](blob/master/lib/Controller.class.php), and abstract class with some helpful static functions. 
+Adding an endpoint is easy! Take a look at [Test.controller.php](Test.controller.php) for as an example. As you can see, it extends [Controller](lib/Controller.class.php), and abstract class with some helpful static functions. 
 
 ```PHP
 Controller::error($code, $desc)
@@ -31,7 +31,7 @@ Controller::getData($verb)
 // Returns an array of passed data - the json_decoded payload for 'put' and 'get', and *$_REQUEST* otherwise.
 ```
 ##### Enabling your endpoint
-Now that you have your endpoint, you enable it by  adding it to one of the controller arrays in [index.php](blob/master/index.php), depending on whether you want to allow anonymous accesss - *choose wisely, my friend.*
+Now that you have your endpoint, you enable it by  adding it to one of the controller arrays in [index.php](index.php), depending on whether you want to allow anonymous accesss - *choose wisely, my friend.*
 ```PHP
 $loggedin_controllers[] = 'Test';
 // or, to allow anonymous access
@@ -75,7 +75,7 @@ To **reset a password** (GET, POST):
 `/reset-password?c=[the key in the email]&p=[new password]`
 
 ### Config file
-[Config.inc.php](blob/master/inc/config.inc.php) contains a bunch of data you can change to better reflect your API.
+[Config.inc.php](inc/config.inc.php) contains a bunch of data you can change to better reflect your API.
 ```PHP
 $config['site'] = array();
 $config['site']['name'] = 'API Framework';
@@ -111,7 +111,7 @@ $_DEV = (in_array( $_SERVER['REMOTE_ADDR'], array( '65.171.45.102' )));
 ### <a name="generic"></a>Generic table editing
 Sometimes you just want to be able to interact with a table via API.  Who am I to judge?
 
-[Generic.controller.php](blob/master/Generic.controller.php) (the `/generic` endpoint) allows for this, assuming the table in question *has a single Primary key*.  It contains a white-list of tables it can update:
+[Generic.controller.php](Generic.controller.php) (the `/generic` endpoint) allows for this, assuming the table in question *has a single Primary key*.  It contains a white-list of tables it can update:
 ```PHP
 private $tables = array('test'); // A list of tables generic can update
 ```
@@ -124,7 +124,7 @@ private $tables = array('test'); // A list of tables generic can update
 **DELETE** `/generic/tablename/primarykeyvalue` removes the row with that key value.
 
 ##### Extending Generic
-Implementing a controller for a particular table can allow for a nicer endpoint. For example, [Test_table.controller.php](blob/master/Test_table.controller.php) turns `/test-table` into the equivalent of `/generic/test`:
+Implementing a controller for a particular table can allow for a nicer endpoint. For example, [Test_table.controller.php](Test_table.controller.php) turns `/test-table` into the equivalent of `/generic/test`:
 ```PHP
 class Test_table extends Generic {
 	public function __construct() {
@@ -180,7 +180,7 @@ public function generatePass( $length=9 )
 
 
 ##### <a name="emails"></a>Email
-[Emails.class.php](blob/master/lib/Emails.class.php) lets you send out emails using templates. By default they are found in the */email-templates* directory, but this can be changed through the [config](#config)'s `$config['email']['templates']`.
+[Emails.class.php](lib/Emails.class.php) lets you send out emails using templates. By default they are found in the */email-templates* directory, but this can be changed through the [config](#config)'s `$config['email']['templates']`.
 
 ```PHP
 // Ex: Emails::send('welcome', 'test@example.com', 'Welcome to...the future!', $data);
@@ -195,7 +195,7 @@ You could access those values in an email template like this: `$name! I hear you
 
 ##### <a name="logger"></a>Logger
 Sometimes it's nice to log run-time messages to the database. You know, for _debugging_.
-The [Logger class](blob/master/lib/Logger.class.php) makes this easy!
+The [Logger class](lib/Logger.class.php) makes this easy!
 ```PHP
 // Do this somewhere in your code before you call Logger::log, but after you connect to the database
 Logger::$database = $database;
@@ -206,7 +206,7 @@ Then, anywhere you want to log a message, you can!  It's as easy as `Logger::log
 
 ##### <a name="sessions">Session
 Maybe you want your sessions to last for three days, I don't know!	Sometimes you just want more control.
-[Session](blob/master/lib/Session.class.php) stores your session data in the database. It's easy to switch between classic sessions and the session library. It's as simple as:
+[Session](lib/Session.class.php) stores your session data in the database. It's easy to switch between classic sessions and the session library. It's as simple as:
 ```PHP
 session_start();
 // Or, to use the Sessions library, do this instead
