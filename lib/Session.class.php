@@ -77,7 +77,7 @@ class Session {
 				$obj = $stmt->fetch(PDO::FETCH_ASSOC);
 				$_SESSION = json_decode( $obj['data'],true );
 			} else {
-				$_SESION = array();
+				$_SESSION = array();
 			}
 		} catch( PDOException $e ) {
 				
