@@ -10,7 +10,7 @@
 
 
 ## Setup
-1. Download the files and place them on a webserber.
+1. Download the files and place them on a webserver.
 2. Update config.inc.php with your site information and database connection credentials
 3. Try  it out: `[api_location]/test?name=tester`
 
