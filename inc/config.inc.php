@@ -2,7 +2,7 @@
 	
 	$config['site'] = array();
 	$config['site']['name'] = 'API Framework';
-	$config['site']['location'] = 'http://example.com/api/';
+	$config['site']['location'] = 'http://'.$_SERVER['SERVER_NAME'].'/'.str_replace('index.php','', $_SERVER['SCRIPT_NAME']);
 
 	// The name and address the emails will come from, and the template location
 	$config['email'] = array();

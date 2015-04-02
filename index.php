@@ -21,7 +21,7 @@
 	// Get the verb & controller
 	$http_verb = strtolower($_SERVER['REQUEST_METHOD']);
 	
-	$request =  str_replace( $config['site']['location'], '', $_SERVER['SCRIPT_URI']);
+	$request =  str_replace( str_replace('index.php','', $_SERVER['SCRIPT_NAME']), '', $_SERVER['REQUEST_URI'] );
 	$request = explode('/', trim($request, '/'));
 	$controller = str_replace('-', '_', ucfirst( array_shift( $request ) ));
 	
