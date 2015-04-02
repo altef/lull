@@ -14,6 +14,14 @@
 2. Update config.inc.php with your site information and database connection credentials
 3. Try  it out: `[api_location]/test?name=tester`
 
+
+\***nginx**: example server config location block:
+```SH 
+location /api {
+    rewrite ^/api/[^\.]*$ /api/index.php?$query_string;
+}
+```
+
 ## <a name="endpoints"></a>How it works
 
 To add an endpoint to your API, you create an endpoint Controller, and decide whether users need to be logged in to use it, or if they can access it anonymously.
