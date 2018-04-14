@@ -63,8 +63,8 @@ class UserManager {
 		if ( $stmt->errorCode() == 0 && $stmt->rowCount() == 1 ) {
 			$data = $stmt->fetch(PDO::FETCH_ASSOC);
 			// Check password
-			if ( crypt( $password, $data['password'] ) == $data['password'] ) {
-				return $data['id'];						
+			if (password_verify( $password, $data['password'] )) {
+				return $data['id'];
 			}			
 		}		
 		return false;
@@ -83,12 +83,11 @@ class UserManager {
 			$password = $this->generatePass();
 		
 		$data = array(
-			'email'=>$username,
-			'salt' => $this->salt()
+			'email'=>$username
 		);
-		$data['hash'] = crypt( $password, $data['salt'] );
+		$data['hash'] = password_hash( $password, PASSWORD_DEFAULT);
 		
-		$query = 'INSERT INTO `'.$config['database']['tables']['users'].'` SET email=:email, password=:hash, salt=:salt';
+		$query = 'INSERT INTO `'.$config['database']['tables']['users'].'` SET email=:email, password=:hash';
 		
 		$stmt = $this->database->prepare( $query );
 		try {
@@ -121,8 +120,7 @@ class UserManager {
 		foreach( $data as $k=>$v ) {
 			if ( in_array( $k, $fields ) ) {
 				if ( $k == 'password' ) {
-					$in['salt'] = $this->salt();
-					$in['password'] = crypt( $v, $in['salt'] );
+					$in['password'] = password_hash( $v, PASSWORD_DEFAULT );
 				} else {
 					$in[$k] = $v;
 				}
@@ -184,10 +182,9 @@ class UserManager {
 		global $config;
 		$data = array(
 			'key'=>$key,
-			'salt'=> $this->salt()
 		);
-		$data['hash'] = crypt( $password, $data['salt'] );
-		$query = 'UPDATE `'.$config['database']['tables']['users'].'` SET password=:hash, salt=:salt WHERE `id`=(SELECT `user` FROM `'.$config['database']['tables']['reset_links'].'` WHERE `key`=:key)';
+		$data['hash'] = password_hash( $password, PASSWORD_DEFAULT );
+		$query = 'UPDATE `'.$config['database']['tables']['users'].'` SET password=:hash WHERE `id`=(SELECT `user` FROM `'.$config['database']['tables']['reset_links'].'` WHERE `key`=:key)';
 		$stmt = $this->database->prepare( $query );
 		$stmt->execute( $data );
 		if (  $stmt->errorCode() == 0 && $stmt->rowCount() == 1 ) {			
@@ -209,9 +206,6 @@ class UserManager {
 		return $this->hash( $length, 4 );
 	}
 	
-	private function salt( $length=22 ) {
-		return '$2y$'.$this->hash( $length, 1 );
-	}
 	
 	private function hash( $length=22, $sets=1 ) {
 		$range = array( array( 65, 90 ), array( 97, 122 ), array(48,57), array( 40,47 ), array( 91, 95 ) );
@@ -235,7 +229,6 @@ class UserManager {
 				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				  `email` varchar(255) NOT NULL,
 				  `password` varchar(255) NOT NULL,
-				  `salt` varchar(63) NOT NULL,
 				  PRIMARY KEY (`id`),
 				  UNIQUE KEY `email` (`email`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;');
