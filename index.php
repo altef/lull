@@ -12,8 +12,8 @@
 
 	
 	// Valid controllers. These are your API endpoints.
-	$loggedin_controllers = array( 'Test', 'Users' );
-	$anonymous_controllers = array('Forgotten_password', 'Reset_password', 'Login', 'Users');
+	$loggedin_controllers = array( 'Users' );
+	$anonymous_controllers = array('Test', 'Forgotten_password', 'Reset_password', 'Login', 'Users');
 	
 	
 	
@@ -24,8 +24,7 @@
 	$request =  str_replace( str_replace('index.php','', $_SERVER['SCRIPT_NAME']), '', $_SERVER['REQUEST_URI'] );
 	$request = explode('/', trim($request, '/'));
 	$controller = str_replace('-', '_', ucfirst( array_shift( $request ) ));
-	
-	
+	list($controller) = explode('?', $controller);
 	
 	// Connect to db
 	try {
